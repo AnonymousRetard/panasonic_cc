@@ -291,6 +291,8 @@ class PanasonicClimateEntity(PanasonicDataEntity, ClimateEntity):
 
     async def _async_enter_summer_house_mode(self, builder: ChangeRequestBuilder):
         """Enter summer house mode."""
+        if self.coordinator.device.in_summer_house_mode:
+            return
         device = self.coordinator.device
         stored_data = await self.coordinator.async_get_stored_data()
 
