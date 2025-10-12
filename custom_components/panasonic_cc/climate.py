@@ -291,16 +291,15 @@ class PanasonicClimateEntity(PanasonicDataEntity, ClimateEntity):
 
     async def _async_enter_summer_house_mode(self, builder: ChangeRequestBuilder):
         """Enter summer house mode."""
-        if self.coordinator.device.in_summer_house_mode:
-            return
         device = self.coordinator.device
-        stored_data = await self.coordinator.async_get_stored_data()
 
-        stored_data['mode'] = device.parameters.mode.value
-        stored_data['ecoMode'] = device.parameters.eco_mode.value
-        stored_data['targetTemperature'] = device.parameters.target_temperature
-        stored_data['fanSpeed'] = device.parameters.fan_speed.value
-        await self.coordinator.async_store_data(stored_data)
+        if not self.coordinator.device.in_summer_house_mode:
+            stored_data = await self.coordinator.async_get_stored_data()
+            stored_data['mode'] = device.parameters.mode.value
+            stored_data['ecoMode'] = device.parameters.eco_mode.value
+            stored_data['targetTemperature'] = device.parameters.target_temperature
+            stored_data['fanSpeed'] = device.parameters.fan_speed.value
+            await self.coordinator.async_store_data(stored_data)
 
         builder.set_hvac_mode(constants.OperationMode.Heat)
         builder.set_eco_mode(constants.EcoMode.Powerful)
