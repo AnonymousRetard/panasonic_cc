@@ -293,7 +293,7 @@ class PanasonicClimateEntity(PanasonicDataEntity, ClimateEntity):
         """Enter summer house mode."""
         device = self.coordinator.device
 
-        if not self.coordinator.device.in_summer_house_mode:
+        if not device.in_summer_house_mode:
             stored_data = await self.coordinator.async_get_stored_data()
             stored_data['mode'] = device.parameters.mode.value
             stored_data['ecoMode'] = device.parameters.eco_mode.value
